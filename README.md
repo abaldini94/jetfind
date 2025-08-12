@@ -9,7 +9,7 @@ Jetfind is a configurable file search tool that combines parallel file system sc
 - **Fuzzy Filtering**: Multiple filtering algorithms including fuzzy matching with Jaro-Winkler
 - **Ignore File Support**: Respects `.findignore` files with glob pattern matching
 - **Configurable Themes**: Customizable colors and styling
-- **Command Integration**: Execute commands on selected files with `-o` flag
+- **Command Integration**: Execute commands on selected files with `--post-cmd` flag
 - **Cross-Platform**: Works on macOS, Linux, and Windows
 
 ## Installation
