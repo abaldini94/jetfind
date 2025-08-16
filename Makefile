@@ -10,7 +10,7 @@ VERSION := $(shell git describe --tags --always --dirty)
 all: build
 
 build:
-	@echo "==> Building... (versione $(VERSION))..."
+	@echo "==> Building... (version $(VERSION))..."
 	@go build -ldflags="-X main.version=$(VERSION)" -o $(BINARY_PATH) $(MAIN_PACKAGE)
 	@echo "==> Exe file created $(BINARY_PATH)"
 
@@ -27,18 +27,18 @@ test-verbose:
 	@go test -v ./...
 
 clean:
-	@echo "==> Pulizia dei file di build..."
+	@echo "==> Cleaning build files..."
 	@rm -rf $(BUILD_DIR)
 	@echo "==> Pulizia completata."
 
 lint:
-	@echo "==> Esecuzione del linter..."
+	@echo "==> linter execution..."
 	@golangci-lint run
 
 install:
-	@echo "==> Installazione di $(BINARY_NAME)..."
+	@echo "==> Installation of $(BINARY_NAME)..."
 	@go install -ldflags="-X main.version=$(VERSION)" $(MAIN_PACKAGE)
-	@echo "==> $(BINARY_NAME) installato in $(shell go env GOPATH)/bin"
+	@echo "==> $(BINARY_NAME) installed in $(shell go env GOPATH)/bin"
 
 # Show available commands
 help:

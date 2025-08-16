@@ -11,6 +11,19 @@ func (m *Model) View() string {
 		return fmt.Sprintf("Error: %v\n", m.scanErr)
 	}
 
+	m.applyFiltering()
+
+	var b strings.Builder
+
+	m.renderQueryBox(&b)
+	m.renderSeparator(&b)
+	m.renderPathList(&b)
+	m.renderStatus(&b)
+
+	return b.String()
+}
+
+func (m *Model) applyFiltering() {
 	if m.userQuery == "" {
 		m.filteredPaths = m.scannedPaths
 	} else {
@@ -33,18 +46,23 @@ func (m *Model) View() string {
 			m.filterRequested = false
 		}
 	}
+}
 
-	var b strings.Builder
-
+func (m *Model) renderQueryBox(b *strings.Builder) {
 	queryText := "Search: " + m.userQuery
 	if m.userQuery == "" {
 		queryText = "Search: (type to search...)"
 	}
 	queryBox := QueryBoxStyle.Render(queryText)
 	b.WriteString(queryBox + "\n")
+}
+
+func (m *Model) renderSeparator(b *strings.Builder) {
 	separator := SeparatorStyle.Render("────────────────────────────────────────")
 	b.WriteString(separator + "\n")
+}
 
+func (m *Model) renderPathList(b *strings.Builder) {
 	lastIdx := m.offset + m.height - 4
 	if lastIdx > len(m.filteredPaths) {
 		lastIdx = len(m.filteredPaths)
@@ -60,7 +78,9 @@ func (m *Model) View() string {
 		}
 		b.WriteString(line + "\n")
 	}
+}
 
+func (m *Model) renderStatus(b *strings.Builder) {
 	var status string
 	if m.scanDone {
 		status = StatusStyle.Render(fmt.Sprintf("--- Scan Completed (%d); Filtered (%d) ---", len(m.scannedPaths), len(m.filteredPaths)))
@@ -69,5 +89,4 @@ func (m *Model) View() string {
 	}
 
 	b.WriteString(status)
-	return b.String()
 }
