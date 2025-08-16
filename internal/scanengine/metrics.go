@@ -115,3 +115,46 @@ func jaroWinkler(s1, s2 string) float64 {
 	return sim + (float64(bonus) * 0.1 * (1.0 - sim))
 
 }
+
+func levenshteinSimilarity(s1, s2 string) float64 {
+	n := len(s1)
+	m := len(s2)
+
+	if n == 0 && m == 0 {
+		return 1.0
+	}
+	if n == 0 || m == 0 {
+		return 0.0
+	}
+
+	lev := make([][]int, n+1)
+	for i := range lev {
+		lev[i] = make([]int, m+1)
+	}
+
+	// Initialize first row and column
+	for i := 0; i <= n; i++ {
+		lev[i][0] = i
+	}
+	for j := 0; j <= m; j++ {
+		lev[0][j] = j
+	}
+
+	for i := 1; i <= n; i++ {
+		for j := 1; j <= m; j++ {
+			cost := 0
+			if s1[i-1] != s2[j-1] {
+				cost = 1
+			}
+			del := float64(lev[i-1][j] + 1)
+			ins := float64(lev[i][j-1] + 1)
+			sub := float64(lev[i-1][j-1] + cost)
+
+			lev[i][j] = int(math.Min(del, math.Min(ins, sub)))
+
+		}
+	}
+
+	maxLen := math.Max(float64(n), float64(m))
+	return 1.0 - float64(lev[n][m])/maxLen
+}

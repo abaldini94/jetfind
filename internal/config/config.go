@@ -3,8 +3,10 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 
+	"github.com/adrg/xdg"
 	"gopkg.in/yaml.v3"
 )
 
@@ -63,6 +65,18 @@ type QueryBoxConfig struct {
 	TextForeground   string `yaml:"text_foreground"`
 	TextBackground   string `yaml:"text_background"`
 	BorderForeground string `yaml:"border_foreground"`
+}
+
+func GetConfigDir() string {
+	return filepath.Join(xdg.ConfigHome, APPNAME)
+}
+
+func GetConfigFilePath() (string, error) {
+	cfgPath, err := xdg.ConfigFile(filepath.Join(APPNAME, "config.yml"))
+	if err != nil {
+		return "", fmt.Errorf("error while getting the configuration file path")
+	}
+	return cfgPath, nil
 }
 
 func Load(configPath string) (*Config, error) {

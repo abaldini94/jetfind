@@ -197,3 +197,65 @@ func TestJaroWinkler(t *testing.T) {
 	}
 
 }
+
+func TestLevenshtainSimilarity(t *testing.T) {
+	const epsilon = 0.001
+
+	testCases := []struct {
+		name     string
+		str1     string
+		str2     string
+		expected float64
+	}{
+		{
+			name:     "Both empty; returns 1",
+			str1:     "",
+			str2:     "",
+			expected: 1.0,
+		},
+		{
+			name:     "S1 empty; returns 0",
+			str1:     "",
+			str2:     "hello",
+			expected: 0.0,
+		},
+		{
+			name:     "S2 empty; returns 0",
+			str1:     "hello",
+			str2:     "",
+			expected: 0.0,
+		},
+		{
+			name:     "Yellow vs. Hello",
+			str1:     "yellow",
+			str2:     "hello",
+			expected: 0.667,
+		},
+		{
+			name:     "Table vs. Table",
+			str1:     "table",
+			str2:     "table",
+			expected: 1.0,
+		},
+		{
+			name:     "Bill vs. Gills",
+			str1:     "bill",
+			str2:     "gills",
+			expected: 0.6,
+		},
+		{
+			name:     "Cat vs. Dog",
+			str1:     "cat",
+			str2:     "dog",
+			expected: 0.0,
+		},
+	}
+
+	for _, tc := range testCases {
+		res := levenshteinSimilarity(tc.str1, tc.str2)
+		if math.Abs(res-tc.expected) > epsilon {
+			t.Errorf("Test %s failed: got %v, expected %v", tc.name, res, tc.expected)
+		}
+	}
+
+}

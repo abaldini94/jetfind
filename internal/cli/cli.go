@@ -6,14 +6,14 @@ import (
 	"os"
 )
 
-type Config struct {
+type CliFlags struct {
 	PostCmd string
 	Help    bool
 	Version bool
 }
 
-func ParseArgs() *Config {
-	config := &Config{}
+func ParseArgs() *CliFlags {
+	config := &CliFlags{}
 
 	flag.StringVar(&config.PostCmd, "post-cmd", "", "Command to execute after a file has been selected")
 	flag.BoolVar(&config.Help, "help", false, "Show help message")
@@ -45,7 +45,6 @@ func ParseArgs() *Config {
 	return config
 }
 
-func (c *Config) HasPostCommand() bool {
+func (c *CliFlags) HasPostCommand() bool {
 	return c.PostCmd != ""
 }
-

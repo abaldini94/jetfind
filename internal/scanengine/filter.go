@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	AlgoJaroWinkler        = "jarowinkler"
-	AlgoNGram              = "ngram"
-	AlgoPrePlusJaroWinkler = "preplusjarowinkler"
+	AlgoJaroWinkler = "jarowinkler"
+	AlgoNGram       = "ngram"
+	AlgoLevenshtein = "levenshtein"
 )
 
 type ScanFilteredResult struct {
@@ -73,22 +73,14 @@ func (ff FuzzyFilter) Apply(path string) (ScanFilteredResult, bool) {
 			return ScanFilteredResult{Path: path, Score: jwSim}, true
 		}
 		return ScanFilteredResult{}, false
-	} else if ff.Algo == AlgoPrePlusJaroWinkler {
-		slashedPaths := filepath.ToSlash(path)
-		parts := strings.Split(slashedPaths, "/")
-		pathNgram := createNgram(parts[len(parts)-1], 2)
-		patternNgram := createNgram(ff.Pattern, 2)
-		overlap := getOverlapCoefficient(pathNgram, patternNgram)
-		if overlap > 0.5 {
-			jwSim := jaroWinkler(parts[len(parts)-1], ff.Pattern)
-			if jwSim > ff.Threashold {
-				return ScanFilteredResult{Path: path, Score: jwSim}, true
-			} else {
-				return ScanFilteredResult{}, false
-			}
-		} else {
-			return ScanFilteredResult{}, false
+	} else if ff.Algo == AlgoLevenshtein {
+		slashedPath := filepath.ToSlash(path)
+		parts := strings.Split(slashedPath, "/")
+		levSim := levenshteinSimilarity(parts[len(parts)-1], ff.Pattern)
+		if levSim > ff.Threashold {
+			return ScanFilteredResult{Path: path, Score: levSim}, true
 		}
+		return ScanFilteredResult{}, false
 	} else {
 		panic("Unknown Fuzzy matching algorithm")
 	}

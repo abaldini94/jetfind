@@ -100,8 +100,8 @@ tui:
 ```
 
 **Filter Configuration:**
-- `type`: Filtering method (`fuzzy`, `contains`, `null` are currently supported)
-- `algorithm`: Fuzzy matching algorithm (`jarowinkler`, `ngram`)
+- `type`: Filtering method (`fuzzy`, `contains` are currently supported)
+- `algorithm`: Fuzzy matching algorithm (`jarowinkler`, `ngram`, `levenshtein`)
 - `threshold`: Minimum similarity score (0.0-1.0, higher = more strict)
 
 **Findignore Configuration:**

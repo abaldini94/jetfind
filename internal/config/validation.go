@@ -41,13 +41,13 @@ func isValidHexColor(color string) bool {
 
 func (c *Config) Validate() error {
 
-	validFilterTypes := []string{"fuzzy", "contains", "null"}
+	validFilterTypes := []string{"fuzzy", "contains"}
 	if !contains(validFilterTypes, c.Filter.Type) {
 		return fmt.Errorf("invalid filter type: %s. Must be one of: %v", c.Filter.Type, validFilterTypes)
 	}
 
 	if c.Filter.Type == "fuzzy" {
-		validAlgos := []string{"jarowinkler", "ngram"}
+		validAlgos := []string{"jarowinkler", "ngram", "levenshtein"}
 		if !contains(validAlgos, c.Filter.Algo) {
 			return fmt.Errorf("invalid filter algorithm: %s. Must be one of: %v", c.Filter.Algo, validAlgos)
 		}
