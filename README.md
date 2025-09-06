@@ -64,7 +64,6 @@ jetfind
 
 # Execute command on selected file
 jetfind --post-cmd vim
-jetfind --cd-to --post-cmd code
 jetfind --post-cmd cat
 ```
 
